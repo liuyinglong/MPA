@@ -1,16 +1,71 @@
-var path = require('path');
-var webpack = require('webpack');
+let path = require('path');
+let fs = require("fs");
+let webpack = require('webpack');
 // 将样式提取到单独的 css 文件中，而不是打包到 js 文件或使用 style 标签插入在 head 标签中
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+let ExtractTextPlugin = require('extract-text-webpack-plugin');
 // 生成自动引用 js 文件的HTML
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var glob = require('glob');
+let HtmlWebpackPlugin = require('html-webpack-plugin');
 
+let glob = require('glob');
 
+/**
+ * 返回文件夹列表
+ * @param path
+ * @returns {Array}
+ */
+function getDirList(path = "./") {
+    let fileList = fs.readdirSync(path);
+    let dirListAry = [];
+    for (let i = 0; i < fileList.length; i++) {
+        let stats = fs.statSync(path + fileList[i]);
+        if (stats.isDirectory()) {
+            dirListAry.push(fileList[i])
+        }
+    }
+    return dirListAry;
+}
+
+/**
+ * 判断该目录下是否存在该类型文件
+ * @param path
+ * @param suffix
+ * @returns {Array}
+ */
+function suffix(path, suffix) {
+    let fileList = fs.readdirSync(path);
+    let fileAry = [];
+    let reg = new RegExp(suffix + "$", "i");
+    for (let i = 0; i < fileList.length; i++) {
+        let stats = fs.statSync(path + fileList[i]);
+        if (stats.isFile() && reg.test(fileList[i])) {
+            fileAry.push(fileList[i]);
+        }
+    }
+    return fileAry;
+}
+
+/**
+ * 判断文件是否存在
+ * @param path
+ * @returns {boolean}
+ */
+function fsExistsSync(path) {
+    try {
+        fs.accessSync(path, fs.F_OK);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * @param globPath
+ * @returns {{}}
+ */
 function getPath(globPath) {
-    var entries = {};
+    let entries = {};
     glob.sync(globPath).forEach(function (filePath) {
-        var pathname = filePath.split("/").slice(-2).join("/");
+        let pathname = filePath.split("/").slice(-2).join("/");
         pathname = pathname.split(".");
         pathname.pop();
         pathname = pathname.join("");
@@ -20,15 +75,15 @@ function getPath(globPath) {
     return entries;
 }
 
-var entries = getPath("./src/page/*/*.js");
 
-for (var k in entries) {
+let entries = getPath("./src/page/*/*.js");
+
+for (let k in entries) {
     entries[k] = ['babel-polyfill', entries[k]];
 }
-console.log(entries);
 
+let chunks = Object.keys(entries);
 
-var chunks = Object.keys(entries);
 module.exports = {
     entry: entries,
     output: {
@@ -58,19 +113,19 @@ module.exports = {
                 exclude: /node_modules/
             },
             {
-                test: /\.(png)$/,
-                loader: 'file-loader',
+                test: /\.(jpg|gif|png|svg)$/,
+                loader: "url-loader",
                 options: {
-                    name: '[name].[ext]?[hash]'
+                    name: 'images/[name].[ext]?[hash]',
+                    limit: 4096
                 }
             },
             {
-                test: /\.(jpg|gif|svg)$/,
-                loader: "url-loader",
-                options: {
-                    name: '[name].[ext]?[hash]',
-                    limit: 4096
-                }
+                test: /\.css$/,
+                use: [
+                    "style-loader",
+                    "css-loader"
+                ]
             },
             {
                 test: /\.scss$/,
@@ -79,29 +134,23 @@ module.exports = {
                     "css-loader?importLoaders=1",
                     {
                         loader: "postcss-loader",
-                        // options: {
-                        //     plugins: function () {
-                        //         return [
-                        //             require('precss'),
-                        //             require('autoprefixer') //({browsers: ['ie>=8', '>1% in CN']})
-                        //         ];
-                        //     }
-                        // }
                     },
                     "sass-loader"
                 ]
             }
         ]
     },
-
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.esm.js'
+            'vue$': 'vue/dist/vue.esm.js',
+            "@": path.resolve(__dirname, "./src")
         }
     },
     devServer: {
         historyApiFallback: true,
         noInfo: true,
+        host: "192.168.1.53",
+        port: "8080",
         contentBase: path.join(__dirname, "dist")
     },
     performance: {
@@ -114,27 +163,31 @@ module.exports = {
             chunks: chunks,  // chunks 是需要提取的模块
             minChunks: 2
         }),
+        new webpack.BannerPlugin(function () {
+            return "version:1.0.0 \n" +
+                "author:liuyinglong \n" +
+                "date:" + new Date() + " \n" +
+                "mail:liuyinglong@utimes.cc"
+        }())
     ],
     devtool: '#eval-source-map'
 };
 
-var pages = getPath("./src/page/*/*.html");
-for (var pathname in pages) {
-    var config = {
+
+for (let pathname in entries) {
+    let config = {
         filename: pathname + ".html",
-        template: pages[pathname],
-        inject: true
+        template: fsExistsSync("./src/page/" + pathname + ".html") ? "./src/page/" + pathname + ".html" : "./src/htmlTemplate/template.html",
+        inject: true,
+        chunks: ["polyfill", "vendors/vendors", pathname],
+        hash: true
     };
-    if (pathname in module.exports.entry) {
-        config.chunks = ["polyfill", "vendors/vendors", pathname];
-        config.hash = true;
-    }
     module.exports.plugins.push(new HtmlWebpackPlugin(config));
 }
 
 
 if (process.env.NODE_ENV === 'production') {
-    module.exports.devtool = '#source-map'
+    module.exports.devtool = '#source-map';
     // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([
         new webpack.DefinePlugin({

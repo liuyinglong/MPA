@@ -35,9 +35,5 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 └─tools              工具文件夹  
 
 
-## webpack plugins
-### extract-text-webpack-plugin 提取样式到文件
 
-
-### html-webpack-plugin
 

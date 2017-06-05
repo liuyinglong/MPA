@@ -6,7 +6,7 @@
 import Vue from "vue";
 import router from "./router/router";
 import App from "./App.vue";
-import tools from "tools_kit";
+
 
 import "../../scss/common.scss";
 new Vue({
