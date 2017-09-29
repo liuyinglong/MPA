@@ -6,9 +6,10 @@
 import Vue from "vue";
 import router from "./router/router";
 import App from "./App.vue";
+import resize from "../../tools/resize";
 
 
-import "../../scss/common.scss";
+import "../../style/scss/common.scss";
 new Vue({
     el: "#app",
     render: function (createElement) {

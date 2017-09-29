@@ -1,0 +1,177 @@
+@import "./v.scss";
+
+.scrollBox {
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch; //局部滚动(仅iOS 5以上支持)
+}
+
+//水平
+.flex {
+    display: flex;
+    flex-direction: row;
+}
+
+//垂直
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+//主轴剧中对齐方式
+.FJustifyCenter {
+    justify-content: center;
+}
+
+//主轴两端对齐
+.FJustifyBetween {
+    justify-content: space-between;
+}
+
+.FJustifyStart {
+    justify-content: flex-start;
+}
+
+//交叉轴居中对齐
+.FAlignCenter {
+    align-items: center;
+}
+
+//交叉轴两端对齐
+.FAlignStretch {
+    align-items: stretch;
+}
+
+//放大比例
+.FGrow {
+    flex-grow: 1;
+}
+
+//缩小比例
+.FShrink {
+    flex-shrink: 1;
+}
+
+.FFlex {
+    flex-grow: 1;
+}
+
+.flexAuto {
+    flex: 1 1 auto;
+}
+
+.flexNone {
+    flex: none;
+}
+
+.mr5 {
+    margin-right: px(5);
+}
+
+.ml5 {
+    margin-left: px(5);
+}
+
+.mt5 {
+    margin-top: px(5);
+}
+
+.ml10 {
+    margin-left: px(10);
+}
+
+.mt10 {
+    margin-top: px(10);
+}
+
+.mt15 {
+    margin-top: px(15);
+}
+
+.mt20 {
+    margin-top: px(20);
+}
+
+.mr10 {
+    margin-right: px(10);
+}
+
+.pl20 {
+    padding-left: px(20) !important;
+}
+
+.prl20 {
+    padding-left: px(20) !important;
+    padding-right: px(20) !important;
+}
+
+.p15 {
+    padding: px(15);
+}
+
+.pr15 {
+    padding-right: px(15);
+}
+
+.ptb15 {
+    padding-top: px(15);
+    padding-bottom: px(15);
+}
+
+.pb100 {
+    padding-bottom: px(100);
+}
+
+.pb50 {
+    padding-bottom: px(50);
+}
+
+.prl15 {
+    padding-left: px(15) !important;
+    padding-right: px(15) !important;
+}
+
+.tc {
+    text-align: center;
+}
+
+.tr {
+    text-align: right;
+}
+
+.f12 {
+    font-size: px(12);
+}
+
+.f14 {
+    font-size: px(14);
+}
+
+.f20 {
+    font-size: px(20);
+}
+
+.fixedBtn {
+    position: fixed;
+    bottom: 0;
+    //left: 50%;
+    width: 100%;
+    //width: px(375);
+    //margin-left: px(-375/2);
+    height: px(50);
+    line-height: px(50);
+    text-align: center;
+}
+
+.overEllipsis {
+    @include over-ellipsis;
+}
+
+@keyframes rotateAni {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

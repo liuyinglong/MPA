@@ -1,0 +1,44 @@
+@import "v";
+
+* {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+
+
+input, textarea {
+    outline: none;
+}
+
+select, button {
+    -webkit-appearance: none;
+}
+
+html {
+    background: #f2f3f4;
+    line-height: 1.15;
+    //font-family:DINOT;
+    font-family: "PingFang SC Regular", Helvetica, "Droid Sans", Arial, sans-serif;
+}
+
+body, ul, li, p, h1, h2, h3, h4, h5, h6, p, li, ul, input {
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+.wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    font-size: px(14);
+}

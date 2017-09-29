@@ -7,9 +7,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
-import index from "../../../component/index.vue";
-
-console.log(index);
+import index from "../view/index.vue";
 
 const routes = [
     {

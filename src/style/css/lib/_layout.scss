@@ -1,0 +1,24 @@
+@charset "UTF-8";
+
+@mixin absolute_center {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+@mixin absolute_center_horizontal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+@mixin absolute_center_vertical {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}

@@ -1,0 +1,7 @@
+@import "../css/global";
+
+@mixin over-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
